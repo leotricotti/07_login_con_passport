@@ -1,3 +1,4 @@
+import passport from "passport";
 import { Router } from "express";
 import User from "../dao/dbmanager/users.manager.js";
 
@@ -73,7 +74,7 @@ router.get("/check", async (req, res) => {
 //Ruta que realiza el logout
 router.get("/logout", async (req, res) => {
   try {
-    const logout = await req.session.destroy();
+    const logout = req.session.destroy();
     if (logout) {
       res.redirect("/");
     } else {
