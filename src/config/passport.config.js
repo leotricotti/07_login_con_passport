@@ -4,6 +4,7 @@ import User from "../dao/dbmanager/users.manager.js";
 import { createHash, isValidPassword } from "../utils.js";
 
 const LocalStrategy = local.Strategy;
+const userManager = new User();
 
 const initializePassport = () => {
   passport.use(
@@ -16,39 +17,29 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
         try {
-          console.log(username);
-
-          const user = await User.findOne({ email: username });
-          console.log("user", user);
-          if (user) {
-            return done(null, false, { message: "User already exists" });
+          const user = await userManager.getOne(username);
+          if (user.length > 0) {
+            return done(null, false, {
+              message: "Error al crear el usuario. El usuario ya existe",
+            });
+          } else {
+            const newUser = {
+              first_name,
+              last_name,
+              email,
+              age,
+              password: createHash(password),
+            };
+            console.log("newUser", newUser);
+            let result = await userManager.signup(newUser);
+            return done(null, result);
           }
-          const newUser = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password),
-          };
-          console.log("aqui vamos bien");
-          console.log(newUser);
-          let result = await User.create(newUser);
-          return done(null, result);
         } catch (error) {
           return done("Error al obtener el usuario", error);
         }
       }
     )
   );
-
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    let user = await User.findById(id);
-    done(null, user);
-  });
 
   passport.use(
     "login",
@@ -66,17 +57,25 @@ const initializePassport = () => {
           }
           console.log("user", user);
           if (!isValidPassword(user.password, password)) {
-            return done(null, false, { message: "Wrong password" });
+            return done(null, false, { message: "Contraseña incorrecta" });
           } else {
             return done(null, user);
           }
         } catch (error) {
-          console.log("aqui fallo");
           return done("Error al obtener el usuario", error);
         }
       }
     )
   );
+
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    let user = await userManager.getOne(id);
+    done(null, user);
+  });
 };
 
 export default initializePassport;
