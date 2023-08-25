@@ -11,6 +11,7 @@ import handlebars from "express-handlebars";
 import CartsRouter from "./routes/carts.routes.js";
 import LoginRouter from "./routes/login.routes.js";
 import SignUpRouter from "./routes/signup.routes.js";
+import ForgotRouter from "./routes/forgot.routes.js";
 import SessionRouter from "./routes/session.routes.js";
 import ProductsRouter from "./routes/products.routes.js";
 import Products from "./dao/dbmanager/products.manager.js";
@@ -113,9 +114,10 @@ const authAdmin = async (req, res, next) => {
 
 // Routes
 app.use("/", LoginRouter);
+app.use("/forgot", ForgotRouter);
 app.use("/signup", SignUpRouter);
-app.use("/api/carts", auth, CartsRouter);
 app.use("/api/session", SessionRouter);
+app.use("/api/carts", auth, CartsRouter);
 app.use("/api/products", auth, ProductsRouter);
 app.use("/api/realtimeproducts", authAdmin, RealTimeProducts);
 

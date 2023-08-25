@@ -3,6 +3,11 @@ const moveToSignup = () => {
   window.location.href = "/signup";
 };
 
+// Redireecionar a la página de recuperar contraseña
+const moveToForgot = () => {
+  window.location.href = "/forgot";
+};
+
 //Capturar datos del formulario de registro y los envía al servidor
 async function postLogin(username, password) {
   const response = await fetch("/api/session/login/", {
