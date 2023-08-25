@@ -6,61 +6,49 @@ const router = Router();
 const usersManager = new User();
 
 //Ruta que realiza el login
-router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const result = await usersManager.login(username, password);
-
-    if (result.length === 0)
-      return res.status(401).json({
-        respuesta: "Usuario o contraseña incorrectos",
-      });
-    else {
-      if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
-        req.session.user = username;
-        req.session.admin = true;
-        res.status(200).json({
-          respuesta: "Bienvenido al servidor",
-        });
-      } else {
-        req.session.user = username;
-        req.session.admin = false;
-        res.status(200).json({
-          respuesta: "Bienvenido a la tienda",
-        });
-      }
+router.post(
+  "/login",
+  passport.authenticate("login", {
+    failureRedirect: "/failLogin",
+  }),
+  async (req, res) => {
+    console.log(req.user);
+    if (!req.user) {
+      return res.status(401).json("error de autenticacion");
     }
-  } catch (error) {
-    console.log(error);
+    req.session.user = {
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      email: req.user.email,
+      age: req.user.age,
+    };
+    req.session.admin = true;
+
+    res.send({ status: "success", mesage: "user logged", user: req.user });
   }
+);
+
+//Ruta que se ejecuta cuando falla el login
+router.get("/failLogin", async (req, res) => {
+  console.log("failed strategy");
+  res.send({ error: "failed" });
 });
 
-//Ruta que realiza el signup
-router.post("/signup", async (req, res) => {
-  const { first_name, last_name, age, email, password } = req.body;
-  try {
-    const result = await usersManager.signup({
-      first_name,
-      last_name,
-      age,
-      email,
-      password,
-    });
-
-    if (result === null) {
-      return res.status(401).json({
-        respuesta: "Algo salió mal. No hemos podido crear el usuario",
-      });
-    } else {
-      req.session.user = email;
-      req.session.admin = true;
-      res.status(200).json({
-        respuesta: "Usuario creado exitosamente",
-      });
-    }
-  } catch (error) {
-    console.log(error);
+//Ruta que realiza el registro
+router.post(
+  "/signup",
+  passport.authenticate("register", {
+    failureRedirect: "/failRegister",
+  }),
+  async (req, res) => {
+    res.send({ status: "success", mesage: "user registered" });
   }
+);
+
+//Ruta que se ejecuta cuando falla el registro
+router.get("/failRegister", async (req, res) => {
+  console.log("failed strategy");
+  res.send({ error: "failed" });
 });
 
 //Ruta que comprueba si el usuario está logueado

@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import passport from "passport";
 import * as dotenv from "dotenv";
 import __dirname from "./utils.js";
 import { Server } from "socket.io";
@@ -13,8 +14,10 @@ import SignUpRouter from "./routes/signup.routes.js";
 import SessionRouter from "./routes/session.routes.js";
 import ProductsRouter from "./routes/products.routes.js";
 import Products from "./dao/dbmanager/products.manager.js";
+import initializePassport from "./config/passport.config.js";
 import RealTimeProducts from "./routes/realTimeProducts.routes.js";
 
+// Inicializar servicios
 dotenv.config();
 const productsManager = new Products();
 
@@ -57,6 +60,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+// Passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Conexión respuesta de la base de datos
 const enviroment = async () => {
