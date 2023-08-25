@@ -37,7 +37,7 @@ const saveCartId = (cartId) => {
 
 //Obtener carrito
 const getCartId = async () => {
-  const response = await fetch("http://localhost:3000/api/carts");
+  const response = await fetch("http://localhost:3002/api/carts");
   const carts = await response.json();
   const lastCart = carts[carts.length - 1];
   saveCartId(lastCart._id);
