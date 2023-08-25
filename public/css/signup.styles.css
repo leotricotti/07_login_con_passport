@@ -90,3 +90,24 @@ a {
 .btn-submit:hover {
   opacity: 1;
 }
+
+.fa-eye-slash,
+.fa-eye {
+  color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: absolute;
+  right: 16px;
+  bottom: 10px;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.fa-eye-slash:hover,
+.fa-eye:hover {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.show-password {
+  opacity: 1;
+  z-index: 999;
+}
