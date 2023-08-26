@@ -50,20 +50,20 @@ const initializePassport = () => {
         passwordField: "password",
       },
       async (req, username, password, done) => {
-        try {
-          const user = await User.findOne({ email: username });
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
-          console.log("user", user);
-          if (!isValidPassword(user.password, password)) {
-            return done(null, false, { message: "Contraseña incorrecta" });
-          } else {
-            return done(null, user);
-          }
-        } catch (error) {
-          return done("Error al obtener el usuario", error);
-        }
+        console.log("username", username);
+        console.log("password", password);
+        // try {
+        //   const user = await userManager.getOne(username);
+        //   if (!user) {
+        //     return done(null, false, { message: "Usuario no encotrado" });
+        //   } else if (!isValidPassword(user.password, password)) {
+        //     return done(null, false, { message: "Contraseña incorrecta" });
+        //   } else {
+        //     return done(null, user);
+        //   }
+        // } catch (error) {
+        //   return done("Error al obtener el usuario", error);
+        // }
       }
     )
   );

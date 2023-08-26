@@ -10,7 +10,7 @@ const moveToForgot = () => {
 
 //Capturar datos del formulario de registro y los envía al servidor
 async function postLogin(username, password) {
-  const response = await fetch("/api/session/login/", {
+  const response = await fetch("/api/session/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
