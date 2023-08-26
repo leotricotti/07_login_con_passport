@@ -76,7 +76,6 @@ router.post("/forgot", async (req, res) => {
 router.get("/check", async (req, res) => {
   try {
     const user = await req.session.user;
-    console.log(user);
 
     if (user) {
       res.status(200).json({
