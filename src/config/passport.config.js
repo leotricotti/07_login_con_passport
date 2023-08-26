@@ -57,10 +57,8 @@ const initializePassport = () => {
             });
           }
           if (!isValidPassword(user[0].password, password)) {
-            console.log("Contraseña incorrecta");
             return done(null, false, { message: "Contraseña incorrecta" });
           } else {
-            console.log("Usuario y contraseña correctos");
             return done(null, user);
           }
         } catch (error) {

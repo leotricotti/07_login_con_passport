@@ -15,23 +15,22 @@ router.post(
   }),
   async (req, res) => {
     if (!req.user) {
-      return res.status(401).json("error de autenticacion");
+      return res.status(401).json("Error de autenticacion");
     }
     req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      age: req.user.age,
+      first_name: req.user[0].first_name,
+      last_name: req.user[0].last_name,
+      email: req.user[0].email,
+      age: req.user[0].age,
     };
-    req.session.admin = true;
 
-    res.send({ status: "success", mesage: "user logged", user: req.user });
+    res.status(200).json({ message: "Usuario logueado con éxito" });
   }
 );
 
 //Ruta que se ejecuta cuando falla el login
 router.get("/failLogin", async (req, res) => {
-  res.status(401).send({ message: "No se ha podido iniciar sesión" });
+  res.status(401).json({ message: "No se ha podido iniciar sesión" });
 });
 
 //Ruta que realiza el registro
@@ -41,9 +40,7 @@ router.post(
     failureRedirect: "/failRegister",
   }),
   async (req, res) => {
-    res
-      .status(200)
-      .json({ status: "success", message: "Usuario creado con éxito" });
+    res.status(200).json({ message: "Usuario creado con éxito" });
   }
 );
 
@@ -69,25 +66,6 @@ router.post("/forgot", async (req, res) => {
     res.status(200).json({
       respuesta: "Contrseña actualizada con éxito",
     });
-  }
-});
-
-//Ruta que comprueba si el usuario está logueado
-router.get("/check", async (req, res) => {
-  try {
-    const user = await req.session.user;
-
-    if (user) {
-      res.status(200).json({
-        respuesta: "Bienvenido a la tienda",
-      });
-    } else {
-      res.status(401).json({
-        respuesta: "Algo salió mal. No hemos podido identificar al usuario",
-      });
-    }
-  } catch (error) {
-    console.error(error);
   }
 });
 

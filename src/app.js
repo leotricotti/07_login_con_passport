@@ -79,47 +79,14 @@ const enviroment = async () => {
 
 enviroment();
 
-//Middleware para hacer privadas las rutas
-const auth = async (req, res, next) => {
-  try {
-    const session = await req.session;
-    const user = await session.user;
-    if (user && session) {
-      return next();
-    } else {
-      return res.status(401).json({
-        respuesta: "No estás autorizado",
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// Middleware para validar si el usuario es administrador
-const authAdmin = async (req, res, next) => {
-  try {
-    const admin = req.session.admin;
-    if (admin) {
-      return next();
-    } else {
-      return res.status(401).json({
-        respuesta: "No estás autorizado",
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // Routes
 app.use("/", LoginRouter);
 app.use("/forgot", ForgotRouter);
 app.use("/signup", SignUpRouter);
 app.use("/api/session", SessionRouter);
-app.use("/api/carts", auth, CartsRouter);
-app.use("/api/products", auth, ProductsRouter);
-app.use("/api/realtimeproducts", authAdmin, RealTimeProducts);
+app.use("/api/carts", CartsRouter);
+app.use("/api/products", ProductsRouter);
+app.use("/api/realtimeproducts", RealTimeProducts);
 
 // Server
 const httpServer = app.listen(PORT, () => {
