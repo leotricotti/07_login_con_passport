@@ -1,6 +1,6 @@
 //Funcion que envia los datos al backend
 async function postForgot(username, newPassword) {
-  const response = await fetch("/api/session/forgot", {
+  const response = await fetch("api/session/forgot", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

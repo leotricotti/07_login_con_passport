@@ -41,35 +41,6 @@ const initializePassport = () => {
     )
   );
 
-  passport.use(
-    "login",
-    new LocalStrategy(
-      {
-        passReqToCallback: true,
-        usernameField: "email",
-        passwordField: "password",
-      },
-      async (req, username, password, done) => {
-        console.log("username", username);
-        console.log("password", password);
-        console.log("req.body", req.body);
-        // try {
-        //   const user = await userManager.findOne(username);
-        //   if (!user) {
-        //     return done(null, false, { message: "Usuario no encontrado" });
-        //   }
-        //   if (!isValidPassword(user.password, password)) {
-        //     return done(null, false, { message: "Contraseña incorrecta" });
-        //   } else {
-        //     return done(null, user);
-        //   }
-        // } catch (error) {
-        //   return done("Error al obtener el usuario", error);
-        // }
-      }
-    )
-  );
-
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
@@ -78,6 +49,33 @@ const initializePassport = () => {
     let user = await userManager.getOne(id);
     done(null, user);
   });
+
+  passport.use(
+    "login",
+    new LocalStrategy(
+      {
+        passReqToCallback: true,
+        usernameField: "username",
+        passwordField: "password",
+      },
+      async (username, password, done) => {
+        try {
+          const user = await userManager.findOne(username);
+          console.log("user", user);
+          if (!user) {
+            return done(null, false, { message: "Usuario no encontrado" });
+          }
+          if (!isValidPassword(user.password, password)) {
+            return done(null, false, { message: "Contraseña incorrecta" });
+          } else {
+            return done(null, user);
+          }
+        } catch (error) {
+          return done("Error al obtener el usuario", error);
+        }
+      }
+    )
+  );
 };
 
 export default initializePassport;

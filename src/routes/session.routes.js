@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Router } from "express";
+import { createHash } from "../utils.js";
 import User from "../dao/dbmanager/users.manager.js";
 
 //Inicializa variables
@@ -9,10 +10,11 @@ const usersManager = new User();
 //Ruta que realiza el login
 router.post(
   "/login",
-  passport.authenticate("login", {
-    failureRedirect: "/failLogin",
-  }),
+  // passport.authenticate("login", {
+  //   // failureRedirect: "/failLogin",
+  // }),
   async (req, res) => {
+    console.log("req.user", req.body);
     if (!req.user) {
       return res.status(401).json("error de autenticacion");
     }
@@ -23,14 +25,13 @@ router.post(
       age: req.user.age,
     };
     req.session.admin = true;
-
     res.send({ status: "success", mesage: "user logged", user: req.user });
   }
 );
 
 //Ruta que se ejecuta cuando falla el login
 router.get("/failLogin", async (req, res) => {
-  res.status(401).json({ message: "No se ha podido iniciar sesión" });
+  res.status(401).send({ message: "No se ha podido iniciar sesión" });
 });
 
 //Ruta que realiza el registro
@@ -51,38 +52,23 @@ router.get("/failRegister", async (req, res) => {
   res.send({ error: "Error al crear el ususario" });
 });
 
-//Ruta que comprueba si el usuario está logueado
-router.get("/check", async (req, res) => {
-  try {
-    const user = await req.session.user;
+//Ruta que recupera la contraseña
+router.post("/forgot", async (req, res) => {
+  const { username, newPassword } = req.body;
 
-    if (user) {
-      res.status(200).json({
-        respuesta: "Bienvenido a la tienda",
-      });
-    } else {
-      res.status(401).json({
-        respuesta: "Algo salió mal. No hemos podido identificar al usuario",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-//Ruta que realiza el logout
-router.get("/logout", async (req, res) => {
-  try {
-    const logout = req.session.destroy();
-    if (logout) {
-      res.redirect("/");
-    } else {
-      res.status(401).json({
-        respuesta: "Algo salió mal. No hemos podido cerrar la sesión",
-      });
-    }
-  } catch (error) {
-    console.error(error);
+  const result = await usersManager.getOne(username);
+  if (result.length === 0)
+    return res.status(401).json({
+      respuesta: "El usuario no existe",
+    });
+  else {
+    const updatePassword = await usersManager.updatePassword(
+      result[0]._id,
+      createHash(newPassword)
+    );
+    res.status(200).json({
+      respuesta: "Contrseña actualizada con éxito",
+    });
   }
 });
 
