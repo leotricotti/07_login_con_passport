@@ -30,7 +30,6 @@ const initializePassport = () => {
               age,
               password: createHash(password),
             };
-            console.log("newUser", newUser);
             let result = await userManager.signup(newUser);
             return done(null, result);
           }
@@ -52,9 +51,7 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         try {
           const user = await userManager.getOne(username);
-          console.log("user", user);
           if (user.length === 0) {
-            console.log("El usuario no existe");
             return done(null, false, {
               message: "El usuario no existe",
             });
@@ -67,7 +64,6 @@ const initializePassport = () => {
             return done(null, user);
           }
         } catch (error) {
-          console.log("aqui fallo");
           return done("Error al obtener el usuario", error);
         }
       }
@@ -75,13 +71,11 @@ const initializePassport = () => {
   );
 
   passport.serializeUser((user, done) => {
-    console.log("serializeUser", user);
     done(null, user[0].email);
   });
 
   passport.deserializeUser(async (id, done) => {
     let user = await userManager.getOne(id);
-    console.log("deserializeUser", user);
     done(null, user);
   });
 };

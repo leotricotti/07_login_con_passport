@@ -14,7 +14,6 @@ router.post(
     failureRedirect: "api/session/failLogin",
   }),
   async (req, res) => {
-    console.log(req.user);
     if (!req.user) {
       return res.status(401).json("error de autenticacion");
     }
@@ -70,6 +69,26 @@ router.post("/forgot", async (req, res) => {
     res.status(200).json({
       respuesta: "Contrseña actualizada con éxito",
     });
+  }
+});
+
+//Ruta que comprueba si el usuario está logueado
+router.get("/check", async (req, res) => {
+  try {
+    const user = await req.session.user;
+    console.log(user);
+
+    if (user) {
+      res.status(200).json({
+        respuesta: "Bienvenido a la tienda",
+      });
+    } else {
+      res.status(401).json({
+        respuesta: "Algo salió mal. No hemos podido identificar al usuario",
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
 });
 
