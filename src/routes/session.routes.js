@@ -14,9 +14,7 @@ router.post(
   }),
   async (req, res) => {
     if (!req.user) {
-      return res
-        .status(401)
-        .json({ message: "No se ha podido iniciar sesión" });
+      return res.status(401).json("error de autenticacion");
     }
     req.session.user = {
       first_name: req.user.first_name,
@@ -26,7 +24,7 @@ router.post(
     };
     req.session.admin = true;
 
-    res.status(200).json({ message: "Usuario logueado con éxito" });
+    res.send({ status: "success", mesage: "user logged", user: req.user });
   }
 );
 

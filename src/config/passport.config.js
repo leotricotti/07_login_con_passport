@@ -52,11 +52,13 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         console.log("username", username);
         console.log("password", password);
+        console.log("req.body", req.body);
         // try {
-        //   const user = await userManager.getOne(username);
+        //   const user = await userManager.findOne(username);
         //   if (!user) {
-        //     return done(null, false, { message: "Usuario no encotrado" });
-        //   } else if (!isValidPassword(user.password, password)) {
+        //     return done(null, false, { message: "Usuario no encontrado" });
+        //   }
+        //   if (!isValidPassword(user.password, password)) {
         //     return done(null, false, { message: "Contraseña incorrecta" });
         //   } else {
         //     return done(null, user);
