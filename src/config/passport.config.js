@@ -41,15 +41,6 @@ const initializePassport = () => {
     )
   );
 
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    let user = await userManager.getOne(id);
-    done(null, user);
-  });
-
   passport.use(
     "login",
     new LocalStrategy(
@@ -58,24 +49,41 @@ const initializePassport = () => {
         usernameField: "username",
         passwordField: "password",
       },
-      async (username, password, done) => {
+      async (req, username, password, done) => {
         try {
-          const user = await userManager.findOne(username);
+          const user = await userManager.getOne(username);
           console.log("user", user);
-          if (!user) {
-            return done(null, false, { message: "Usuario no encontrado" });
+          if (user.length === 0) {
+            console.log("El usuario no existe");
+            return done(null, false, {
+              message: "El usuario no existe",
+            });
           }
-          if (!isValidPassword(user.password, password)) {
+          if (!isValidPassword(user[0].password, password)) {
+            console.log("Contraseña incorrecta");
             return done(null, false, { message: "Contraseña incorrecta" });
           } else {
+            console.log("Usuario y contraseña correctos");
             return done(null, user);
           }
         } catch (error) {
+          console.log("aqui fallo");
           return done("Error al obtener el usuario", error);
         }
       }
     )
   );
+
+  passport.serializeUser((user, done) => {
+    console.log("serializeUser", user);
+    done(null, user[0].email);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    let user = await userManager.getOne(id);
+    console.log("deserializeUser", user);
+    done(null, user);
+  });
 };
 
 export default initializePassport;

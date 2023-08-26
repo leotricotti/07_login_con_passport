@@ -40,6 +40,33 @@ const createCart = async () => {
   const result = await response.json();
 };
 
+//Comprobar si el usuario está logueado
+const checkUser = async () => {
+  const response = await fetch("/api/session/check", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  try {
+    if (!response.ok) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Algo salió mal! Vuelve a intentarlo",
+        showConfirmButton: true,
+        confirmButtonText: "Aceptar",
+      });
+    } else {
+      window.location.href = "/api/products?page=1";
+      localStorage.setItem("currentPage", 1);
+      createCart();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //Capturar datos del formulario de login y los envía al servidor
 const loginForm = document.getElementById("login-form");
 const loginButton = document.getElementById("login-button");
@@ -49,4 +76,5 @@ loginForm.addEventListener("submit", function (event) {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
   postLogin(username, password);
+  checkUser();
 });

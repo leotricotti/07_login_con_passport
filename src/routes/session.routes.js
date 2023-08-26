@@ -10,11 +10,11 @@ const usersManager = new User();
 //Ruta que realiza el login
 router.post(
   "/login",
-  // passport.authenticate("login", {
-  //   // failureRedirect: "/failLogin",
-  // }),
+  passport.authenticate("login", {
+    failureRedirect: "api/session/failLogin",
+  }),
   async (req, res) => {
-    console.log("req.user", req.body);
+    console.log(req.user);
     if (!req.user) {
       return res.status(401).json("error de autenticacion");
     }
@@ -25,6 +25,7 @@ router.post(
       age: req.user.age,
     };
     req.session.admin = true;
+
     res.send({ status: "success", mesage: "user logged", user: req.user });
   }
 );
