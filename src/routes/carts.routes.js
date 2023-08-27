@@ -1,10 +1,8 @@
 import { Router } from "express";
-import User from "../dao/dbmanager/users.manager.js";
 import Cart from "../dao/dbmanager/carts.manager.js";
 
 //Inicializar servicios
 const router = Router();
-const usersManager = new User();
 const cartsManager = new Cart();
 
 //Método asyncrono para obtener todos los carritos
@@ -45,13 +43,13 @@ router.get("/:cid", async (req, res) => {
   const { cid } = req.params;
   try {
     const cart = await cartsManager.populatedCart(cid);
-    const user = await usersManager.getOne(req.session.user);
+    const user = req.session.user[0].first_name || req.session.user.first_name;
     const product = cart.products;
     if (cart) {
       res.render("carts", {
         cart: product,
         styles: "carts.styles.css",
-        user: user[0].first_name,
+        user: user,
       });
     } else {
       res.status(404).json({
