@@ -74,38 +74,6 @@ const initializePassport = () => {
     )
   );
 
-  // Configurar passport para loguear usuarios con github
-  passport.use(
-    "github",
-    new GitHubStrategy(
-      {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/api/sessions/githubcallback",
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        try {
-          const user = await userManager.getOne(profile.username);
-          if (user.length === 0) {
-            const newUser = {
-              first_name: profile.displayName,
-              last_name: profile.displayName,
-              email: profile.email[0].value,
-              age: 18,
-              password: "",
-            };
-            const result = await userManager.signup(newUser);
-            return done(null, result);
-          } else {
-            return done(null, user);
-          }
-        } catch (error) {
-          return done("Error al obtener el usuario", error);
-        }
-      }
-    )
-  );
-
   // Serializar y deserializar usuarios
   passport.serializeUser((user, done) => {
     done(null, user[0].email);
@@ -117,4 +85,50 @@ const initializePassport = () => {
   });
 };
 
-export default initializePassport;
+// Configurar passport para loguear usuarios con github
+const githubStrategy = () => {
+  passport.use(
+    "github",
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/api/sessions/githubcallback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const user = await userManager.getOne(profile?.emails[0]?.value);
+          console.log(user);
+          if (user.length < 1) {
+            const newUser = {
+              first_name: profile.displayName.split(" ")[0],
+              last_name: profile.displayName.split(" ")[1],
+              email: profile?.emails[0]?.value,
+              age: 18,
+              password: "123",
+            };
+            console.log(newUser);
+            const user = await userManager.signup(newUser);
+            return done(null, user);
+          } else {
+            return done(null, user);
+          }
+        } catch (error) {
+          return done("Error al crear el usuario", error);
+        }
+      }
+    )
+  );
+
+  // Serializar y deserializar usuarios
+  passport.serializeUser((user, done) => {
+    done(null, user.email);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    let user = await userManager.getOne(id);
+    done(null, user);
+  });
+};
+
+export { initializePassport, githubStrategy };

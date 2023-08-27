@@ -8,6 +8,11 @@ const moveToForgot = () => {
   window.location.href = "/forgot";
 };
 
+// Redireecionar a la pagina de login con github
+const moveToGithub = () => {
+  window.location.href = "/api/sessions/github";
+};
+
 //Capturar datos del formulario de registro y los envía al servidor
 async function postLogin(username, password) {
   try {

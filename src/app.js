@@ -15,8 +15,11 @@ import ForgotRouter from "./routes/forgot.routes.js";
 import SessionsRouter from "./routes/sessions.routes.js";
 import ProductsRouter from "./routes/products.routes.js";
 import Products from "./dao/dbmanager/products.manager.js";
-import initializePassport from "./config/passport.config.js";
 import RealTimeProducts from "./routes/realTimeProducts.routes.js";
+import {
+  initializePassport,
+  githubStrategy,
+} from "./config/passport.config.js";
 
 // Inicializar servicios
 dotenv.config();
@@ -63,6 +66,7 @@ app.use(
 );
 
 // Passport
+githubStrategy();
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -83,8 +87,8 @@ enviroment();
 app.use("/", LoginRouter);
 app.use("/forgot", ForgotRouter);
 app.use("/signup", SignUpRouter);
-app.use("/api/sessions", SessionsRouter);
 app.use("/api/carts", CartsRouter);
+app.use("/api/sessions", SessionsRouter);
 app.use("/api/products", ProductsRouter);
 app.use("/api/realtimeproducts", RealTimeProducts);
 

@@ -88,6 +88,7 @@ router.get("/check", async (req, res) => {
   }
 });
 
+//Ruta que cierra la sesión
 const handleLogout = (req, res) => {
   req.logout(() => {
     req.session.destroy();
@@ -96,5 +97,24 @@ const handleLogout = (req, res) => {
 };
 
 router.get("/logout", handleLogout);
+
+router.get(
+  "/github",
+  passport.authenticate(
+    "github",
+    { scope: ["user:email"] },
+    async (req, res) => {}
+  )
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    req.session.admin = true;
+    res.redirect("/api/products?page=1");
+  }
+);
 
 export default router;
