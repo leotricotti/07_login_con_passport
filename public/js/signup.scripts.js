@@ -3,6 +3,11 @@ const moveToLogin = () => {
   window.location.href = "/";
 };
 
+// Redireecionar a la pagina de login con github
+const moveToGithub = () => {
+  window.location.href = "/api/sessions/github";
+};
+
 // Función para crear un usuario
 async function postSignup(first_name, last_name, age, username, password) {
   const data = {

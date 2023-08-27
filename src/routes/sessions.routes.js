@@ -98,6 +98,7 @@ const handleLogout = (req, res) => {
 
 router.get("/logout", handleLogout);
 
+//Ruta que realiza el login con github
 router.get(
   "/github",
   passport.authenticate(
@@ -107,6 +108,7 @@ router.get(
   )
 );
 
+//Callback de github
 router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/login" }),
