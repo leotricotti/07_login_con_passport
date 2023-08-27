@@ -13,9 +13,7 @@ async function postSignup(first_name, last_name, age, username, password) {
     password,
   };
 
-  console.log(data);
-
-  const response = await fetch("/api/session/signup", {
+  const response = await fetch("/api/sessions/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,8 +36,6 @@ signupForm.addEventListener("submit", function (event) {
   const first_name = document.getElementById("first_name").value;
   const last_name = document.getElementById("last_name").value;
   const age = document.getElementById("age").value;
-
-  console.log(username, password, first_name, last_name, age);
 
   // Envía los datos del formulario de registro y crea un usuario
   postSignup(first_name, last_name, age, username, password).then((datos) => {

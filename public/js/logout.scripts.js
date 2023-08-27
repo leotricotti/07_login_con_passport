@@ -1,6 +1,6 @@
 //Cerrar sesión
 const logout = async () => {
-  const response = await fetch("/api/session/logout", {
+  const response = await fetch("/api/sessions/logout", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

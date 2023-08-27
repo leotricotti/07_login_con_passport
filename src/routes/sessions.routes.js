@@ -11,7 +11,7 @@ const usersManager = new User();
 router.post(
   "/login",
   passport.authenticate("login", {
-    failureRedirect: "api/session/failLogin",
+    failureRedirect: "api/sessions/failLogin",
   }),
   async (req, res) => {
     if (!req.user) {

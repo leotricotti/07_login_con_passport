@@ -16,7 +16,7 @@ const moveToGithub = () => {
 //Capturar datos del formulario de registro y los envía al servidor
 async function postLogin(username, password) {
   try {
-    const response = await fetch("/api/session/login", {
+    const response = await fetch("/api/sessions/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const createCart = async () => {
 
 //Comprobar si el usuario está logueado
 const checkUser = async () => {
-  const response = await fetch("/api/session/check", {
+  const response = await fetch("/api/sessions/check", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -98,7 +98,6 @@ const githubStrategy = () => {
       async (accessToken, refreshToken, profile, done) => {
         try {
           const user = await userManager.getOne(profile?.emails[0]?.value);
-          console.log(user);
           if (user.length < 1) {
             const newUser = {
               first_name: profile.displayName.split(" ")[0],
@@ -107,7 +106,6 @@ const githubStrategy = () => {
               age: 18,
               password: "123",
             };
-            console.log(newUser);
             const user = await userManager.signup(newUser);
             return done(null, user);
           } else {
