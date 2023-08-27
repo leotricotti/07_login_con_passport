@@ -8,6 +8,23 @@ const filterProductsByCategory = async (category) => {
   return (window.location.href = `/api/products?category=${category}`);
 };
 
+//Función que crea el carrito si no existe
+const createCart = async () => {
+  if (localStorage.getItem("cartId")) {
+    return;
+  }
+  const response = await fetch("/api/carts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      products: [],
+    }),
+  });
+  const result = await response.json();
+};
+
 //Guardar cartId en localStorage
 const saveCartId = (cartId) => {
   if (!cartId) {

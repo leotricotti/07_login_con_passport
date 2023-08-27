@@ -11,7 +11,8 @@ const productsManager = new Product();
 router.get("/", async (req, res) => {
   const { limit, page, sort, category } = req.query;
   try {
-    const user = await usersManager.getOne(req.session.user.email);
+    const sessionUser = req.session.user[0].email || req.session.user.email;
+    const user = await usersManager.getOne(sessionUser);
     const admin = req.session.admin;
     const response = await productsManager.getAll();
     if (limit) {
