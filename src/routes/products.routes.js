@@ -11,9 +11,11 @@ const productsManager = new Product();
 router.get("/", async (req, res) => {
   const { limit, page, sort, category } = req.query;
   try {
+    if (req.session.user.email === "adminCoder@coder.com") {
+      req.session.admin = true;
+    }
     const sessionUser = req.session.user[0]?.email ?? req.session.user.email;
     const user = await usersManager.getOne(sessionUser);
-    console;
     const admin = req.session.admin;
     const response = await productsManager.getAll();
     if (limit) {
@@ -83,7 +85,7 @@ router.get("/:pid", async (req, res) => {
 //Ruta que realiza el logout
 router.get("/logout", async (req, res) => {
   try {
-    const logout = await req.session.destroy();
+    const logout = req.session.destroy();
     if (logout) {
       res.redirect("/");
     } else {

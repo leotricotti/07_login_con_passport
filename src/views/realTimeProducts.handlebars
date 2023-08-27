@@ -1,18 +1,9 @@
 <main>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">E-Store</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <a class="navbar-brand" href="#">
+        E-Store
+      </a>
       <div
         class="collapse navbar-collapse d-flex align-items-center mb-0"
         id="navbarSupportedContent"
@@ -27,9 +18,13 @@
               class="btn btn-link text-decoration-none admin-btn"
               type="button"
               onclick="goToProducts()"
-            >Productos</button>
+            >
+              Productos
+            </button>
           </div>
-          <p class="text-white-50">Bienvenido {{user}}</p>
+          <p class="text-white-50">
+            Bienvenido {{user}}
+          </p>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -39,33 +34,46 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <span class="text-light me-3" id="'user-name"> </span>
+              <span class="text-light me-3" id="'user-name">
+              </span>
               <i class="fas fa-user"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#"><i
-                    class="fas fa-sliders-h fa-fw"
-                  ></i>
-                  Cuenta</a></li>
-              <li><a class="dropdown-item" href="#"><i
-                    class="fas fa-cog fa-fw"
-                  ></i>
-                  Configuración</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><button class="btn dropdown-item" onclick="logout()"><i
-                    class="fas fa-sign-out-alt fa-fw"
-                  ></i>
-                  Cerrar sesión</button></li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-sliders-h fa-fw"></i>
+                  Cuenta
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-cog fa-fw"></i>
+                  Configuración
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <button class="btn dropdown-item" onclick="logout()">
+                  <i class="fas fa-sign-out-alt fa-fw"></i>
+                  Cerrar sesión
+                </button>
+              </li>
             </ul>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <h3 class="text-center mt-5 mb-5 text-decoration-underline">Agregar productos</h3>
+  <h3 class="text-center mt-5 mb-5 text-decoration-underline">
+    Agregar productos
+  </h3>
   <form action="" class="form-container" id="add-product-form">
     <div class="mb-3">
-      <label for="title" class="form-label">Nombre del producto:</label>
+      <label for="title" class="form-label">
+        Nombre del producto:
+      </label>
       <input
         type="text"
         class="form-control"
@@ -74,7 +82,9 @@
       />
     </div>
     <div class="mb-3">
-      <label for="description" class="form-label">Descripción:</label>
+      <label for="description" class="form-label">
+        Descripción:
+      </label>
       <textarea
         class="form-control"
         placeholder="Descripción del producto..."
@@ -83,7 +93,9 @@
       ></textarea>
     </div>
     <div class="mb-3">
-      <label for="code" class="form-label">Código de producto:</label>
+      <label for="code" class="form-label">
+        Código de producto:
+      </label>
       <input
         type="text"
         class="form-control"
@@ -92,7 +104,9 @@
       />
     </div>
     <div class="mb-3">
-      <label for="price" class="form-label">Precio:</label>
+      <label for="price" class="form-label">
+        Precio:
+      </label>
       <input
         type="number"
         class="form-control"
@@ -101,7 +115,9 @@
       />
     </div>
     <div class="mb-3">
-      <label for="stock" class="form-label">Stock:</label>
+      <label for="stock" class="form-label">
+        Stock:
+      </label>
       <input
         type="number"
         class="form-control"
@@ -110,7 +126,9 @@
       />
     </div>
     <div class="mb-3">
-      <label for="category" class="form-label">Categoría:</label>
+      <label for="category" class="form-label">
+        Categoría:
+      </label>
       <input
         type="text"
         class="form-control"
@@ -119,7 +137,9 @@
       />
     </div>
     <div class="mb-3">
-      <label for="thumbnail" class="form-label">Imagen:</label>
+      <label for="thumbnail" class="form-label">
+        Imagen:
+      </label>
       <input
         type="text"
         class="form-control"
@@ -127,12 +147,15 @@
         placeholder="Ingrese la ruta de la imagen..."
       />
     </div>
-    <button type="submit" class="btn btn-primary" id="submit">Crear producto</button>
+    <button type="submit" class="btn btn-primary" id="submit">
+      Crear producto
+    </button>
   </form>
   <div class="list-group list" id="products-list"></div>
   <div class="d-flex justify-content-center mt-5 mb-5" onclick="nextPage()">
-    <button type="button" class="btn btn-link next-page" id="next-page">Cargar
-      más productos</button>
+    <button type="button" class="btn btn-link next-page" id="next-page">
+      Cargar más productos
+    </button>
   </div>
 </main>
 <!-- Socket -->

@@ -114,7 +114,6 @@ router.get(
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
     req.session.user = req.user;
-    req.session.admin = true;
     res.redirect("/api/products?page=1");
   }
 );

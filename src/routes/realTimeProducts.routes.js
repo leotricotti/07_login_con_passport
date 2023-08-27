@@ -10,14 +10,17 @@ const productsManager = new Product();
 // Método asyncrono para obtener los productos en tiempo real
 router.get("/", async (req, res) => {
   try {
-    const user = await usersManager.getOne(req.session.user);
+    const sessionUser = req.session.user[0]?.email ?? req.session.user.email;
+    const user = await usersManager.getOne(sessionUser);
     res.render("realTimeProducts", {
       styles: "realTimeProducts.styles.css",
       title: "Productos en tiempo real",
       user: user[0].first_name,
     });
   } catch (err) {
-    res.render({ message: "Error al obtener los productos", data: err });
+    res
+      .status(404)
+      .json({ message: "Error al obtener los productos", data: err });
   }
 });
 
