@@ -1,12 +1,17 @@
 import passport from "passport";
+import * as dotenv from "dotenv";
 import local from "passport-local";
+import GitHubStrategy from "passport-github2";
 import User from "../dao/dbmanager/users.manager.js";
 import { createHash, isValidPassword } from "../utils.js";
 
+// Inicializar servicios
+dotenv.config();
 const LocalStrategy = local.Strategy;
 const userManager = new User();
 
 const initializePassport = () => {
+  // Configurar passport para registrar usuarios
   passport.use(
     "register",
     new LocalStrategy(
@@ -40,6 +45,7 @@ const initializePassport = () => {
     )
   );
 
+  // Configurar passport para loguear usuarios
   passport.use(
     "login",
     new LocalStrategy(
@@ -68,6 +74,39 @@ const initializePassport = () => {
     )
   );
 
+  // Configurar passport para loguear usuarios con github
+  passport.use(
+    "github",
+    new GitHubStrategy(
+      {
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/api/sessions/githubcallback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const user = await userManager.getOne(profile.username);
+          if (user.length === 0) {
+            const newUser = {
+              first_name: profile.displayName,
+              last_name: profile.displayName,
+              email: profile.email[0].value,
+              age: 18,
+              password: "",
+            };
+            const result = await userManager.signup(newUser);
+            return done(null, result);
+          } else {
+            return done(null, user);
+          }
+        } catch (error) {
+          return done("Error al obtener el usuario", error);
+        }
+      }
+    )
+  );
+
+  // Serializar y deserializar usuarios
   passport.serializeUser((user, done) => {
     done(null, user[0].email);
   });
