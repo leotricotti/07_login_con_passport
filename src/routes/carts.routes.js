@@ -68,10 +68,8 @@ router.get("/:cid", async (req, res) => {
 
 //Método asyncrono para crear un carrito
 router.post("/", async (req, res) => {
-  let newCart = {
-    products: [],
-  };
   try {
+    const newCart = req.body;
     const result = await cartsManager.saveCart(newCart);
     res.json({ message: "Carrito creado con éxito", data: newCart });
   } catch (err) {
