@@ -69,4 +69,32 @@ router.post("/forgot", async (req, res) => {
   }
 });
 
+//Ruta que comprueba si el usuario está logueado
+router.get("/check", async (req, res) => {
+  try {
+    const user = await req.session.user;
+
+    if (user) {
+      res.status(200).json({
+        respuesta: "Bienvenido a la tienda",
+      });
+    } else {
+      res.status(401).json({
+        respuesta: "Algo salió mal. No hemos podido identificar al usuario",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+const handleLogout = (req, res) => {
+  req.logout(() => {
+    req.session.destroy();
+    res.redirect("/");
+  });
+};
+
+router.get("/logout", handleLogout);
+
 export default router;

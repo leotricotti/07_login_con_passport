@@ -48,7 +48,10 @@ router.get("/", async (req, res) => {
       });
     }
   } catch (err) {
-    res.json({ message: "Error al obtener los productos", data: err });
+    res.json({
+      message: "Error al obtener los productos. Por favor refresque la página.",
+      data: err,
+    });
   }
 });
 
@@ -78,7 +81,7 @@ router.get("/:pid", async (req, res) => {
 //Ruta que realiza el logout
 router.get("/logout", async (req, res) => {
   try {
-    const logout = req.session.destroy();
+    const logout = await req.session.destroy();
     if (logout) {
       res.redirect("/");
     } else {
