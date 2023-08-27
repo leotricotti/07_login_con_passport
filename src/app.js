@@ -12,7 +12,7 @@ import CartsRouter from "./routes/carts.routes.js";
 import LoginRouter from "./routes/login.routes.js";
 import SignUpRouter from "./routes/signup.routes.js";
 import ForgotRouter from "./routes/forgot.routes.js";
-import SessionRouter from "./routes/session.routes.js";
+import SessionsRouter from "./routes/sessions.routes.js";
 import ProductsRouter from "./routes/products.routes.js";
 import Products from "./dao/dbmanager/products.manager.js";
 import initializePassport from "./config/passport.config.js";
@@ -24,7 +24,7 @@ const productsManager = new Products();
 
 //Variables
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3002;
 const MONGO_URI = process.env.MONGO_URI;
 
 // Middlewares
@@ -83,7 +83,7 @@ enviroment();
 app.use("/", LoginRouter);
 app.use("/forgot", ForgotRouter);
 app.use("/signup", SignUpRouter);
-app.use("/api/session", SessionRouter);
+app.use("/api/sessions", SessionsRouter);
 app.use("/api/carts", CartsRouter);
 app.use("/api/products", ProductsRouter);
 app.use("/api/realtimeproducts", RealTimeProducts);
