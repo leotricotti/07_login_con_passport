@@ -58,7 +58,7 @@ app.use(
     }),
     secret: "codersecret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 

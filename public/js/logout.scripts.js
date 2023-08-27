@@ -1,7 +1,7 @@
 //Cerrar sesión
 const logout = async () => {
   const response = await fetch("/api/session/logout", {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -13,7 +13,6 @@ const logout = async () => {
       showConfirmButton: false,
       timer: 2000,
     }).then(() => {
-      window.location.href = "/";
       localStorage.removeItem("cartId");
       localStorage.removeItem("currentPage");
     });
