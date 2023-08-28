@@ -1,4 +1,4 @@
-//Cart-badge en el header
+//Codigo que muestra la cantidad de productos en el carrito de compras
 const cartBadge = async () => {
   const cartId = localStorage.getItem("cartId");
   const cartBadge = document.getElementById("cart-badge");
