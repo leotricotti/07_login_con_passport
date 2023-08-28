@@ -3,6 +3,11 @@ const moveToLogin = () => {
   window.location.href = "/";
 };
 
+// Redireecionar a la pagina para recuperar contraseña
+const moveToForgot = () => {
+  window.location.href = "/forgot";
+};
+
 // Redireecionar a la pagina de login con github
 const moveToGithub = () => {
   window.location.href = "/api/sessions/github";
@@ -27,7 +32,40 @@ async function postSignup(first_name, last_name, age, username, password) {
   });
 
   const result = await response.json();
-  return result;
+
+  if (response.status === 200) {
+    Swal.fire({
+      icon: "success",
+      title: "Usuario creado correctamente",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    moveToLogin();
+  } else if (response.status === 500) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "El usuario ya existe.",
+      showConfirmButton: true,
+      confirmButtonText: "Recuperar contraseña",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        moveToForgot();
+      } else if (result.isDenied) {
+        moveToRegister();
+      }
+    });
+    return false;
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Error al crear el usuario",
+    });
+    return false;
+  }
 }
 
 // Escucha el evento submit del formulario de registro
@@ -43,21 +81,5 @@ signupForm.addEventListener("submit", function (event) {
   const age = document.getElementById("age").value;
 
   // Envía los datos del formulario de registro y crea un usuario
-  postSignup(first_name, last_name, age, username, password).then((datos) => {
-    if (datos) {
-      Swal.fire({
-        icon: "success",
-        title: "Usuario creado correctamente",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      moveToLogin();
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Algo salió mal! Vuelve a intentarlo luego",
-      });
-    }
-  });
+  postSignup(first_name, last_name, age, username, password);
 });

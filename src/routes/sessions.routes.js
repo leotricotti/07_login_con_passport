@@ -11,7 +11,7 @@ const usersManager = new User();
 router.post(
   "/login",
   passport.authenticate("login", {
-    failureRedirect: "api/sessions/failLogin",
+    failureRedirect: "/api/sessions/failLogin",
   }),
   async (req, res) => {
     if (!req.user) {
@@ -36,7 +36,7 @@ router.get("/failLogin", async (req, res) => {
 router.post(
   "/signup",
   passport.authenticate("register", {
-    failureRedirect: "/failRegister",
+    failureRedirect: "/api/sessions/failRegister",
   }),
   async (req, res) => {
     res.status(200).json({ message: "Usuario creado con éxito" });
@@ -45,7 +45,7 @@ router.post(
 
 //Ruta que se ejecuta cuando falla el registro
 router.get("/failRegister", async (req, res) => {
-  res.send({ error: "Error al crear el ususario" });
+  res.status(500).json({ error: "Error al crear el ususario" });
 });
 
 //Ruta que recupera la contraseña
