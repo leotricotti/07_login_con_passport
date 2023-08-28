@@ -43,7 +43,7 @@ router.get("/:cid", async (req, res) => {
   const { cid } = req.params;
   try {
     const cart = await cartsManager.populatedCart(cid);
-    const user = req.session.user[0].first_name || req.session.user.first_name;
+    const user = req.session.user[0]?.first_name ?? req.session.user.first_name;
     const product = cart.products;
     if (cart) {
       res.render("carts", {
